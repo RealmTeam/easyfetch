@@ -1,5 +1,3 @@
-import fetch from 'isomorphic-fetch'
-
 export class EasyFetch {
     constructor(url) {
         this.url = url
