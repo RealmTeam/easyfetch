@@ -95,8 +95,7 @@ export class JsonFetch extends EasyFetch {
     _fetch(method, body) {
         if (body !== undefined)
             body = JSON.stringify(body)
-        return super._fetch(method, body).then((resp) => {
-            body = resp.text()
+        return super._fetch(method, body).then((resp) => resp.text()).then((body) => {
             if (body.length)
                 return JSON.parse(body)
             else

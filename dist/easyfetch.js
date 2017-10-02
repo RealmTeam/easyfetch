@@ -200,7 +200,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function _fetch(method, body) {
 	            if (body !== undefined) body = JSON.stringify(body);
 	            return _get(JsonFetch.prototype.__proto__ || Object.getPrototypeOf(JsonFetch.prototype), '_fetch', this).call(this, method, body).then(function (resp) {
-	                body = resp.text();
+	                return resp.text();
+	            }).then(function (body) {
 	                if (body.length) return JSON.parse(body);else return {};
 	            });
 	        }
