@@ -1,6 +1,6 @@
 {
   "name": "easyfetch",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple wrapper around fetch with json support",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -32,10 +32,8 @@
     "url": "https://github.com/PhilipGarnero/easyfetch/issues"
   },
   "homepage": "https://github.com/PhilipGarnero/easyfetch#readme",
-  "dependencies": {
-  },
-  "peerDependencies": {
-  },
+  "dependencies": {},
+  "peerDependencies": {},
   "devDependencies": {
     "babel-cli": "^6.1.18",
     "babel-core": "^6.14.0",
