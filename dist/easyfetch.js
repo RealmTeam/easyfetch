@@ -62,6 +62,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -88,13 +90,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(EasyFetch, [{
 	        key: 'setHeaders',
 	        value: function setHeaders(headers) {
-	            this.headers = headers;
+	            var override = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+	            var keep = override ? {} : this.headers;
+	            this.headers = _extends({}, keep, headers);
 	            return this;
 	        }
 	    }, {
 	        key: 'setQueryParams',
 	        value: function setQueryParams(queryParams) {
-	            this.queryParams = queryParams;
+	            var override = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+	            var keep = override ? {} : this.queryParams;
+	            this.queryParams = _extends({}, keep, queryParams);
 	            return this;
 	        }
 	    }, {
@@ -112,10 +120,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: '_buildQueryParams',
 	        value: function _buildQueryParams() {
-	            var _this = this;
+	            var q = Object.entries(this.queryParams).map(function (_ref) {
+	                var _ref2 = _slicedToArray(_ref, 2),
+	                    k = _ref2[0],
+	                    value = _ref2[1];
 
-	            var q = Object.keys(this.queryParams).map(function (k) {
-	                return [k, encodeURIComponent(_this.queryParams[k])].join('=');
+	                if (Array.isArray(value)) return value.map(function (v) {
+	                    return [k, encodeURIComponent(v)].join('=');
+	                }).join('&');
+	                return [k, encodeURIComponent(value)].join('=');
 	            }).join('&');
 	            if (this.url.indexOf("?") === -1 && q) q = '?' + q;
 	            return q;
@@ -176,23 +189,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new EasyFetch(url);
 	}
 
+	var JSON_HEADERS = { 'Accept': 'application/json',
+	    'Content-Type': 'application/json' };
+
 	var JsonFetch = exports.JsonFetch = function (_EasyFetch) {
 	    _inherits(JsonFetch, _EasyFetch);
 
 	    function JsonFetch(url) {
 	        _classCallCheck(this, JsonFetch);
 
-	        var _this2 = _possibleConstructorReturn(this, (JsonFetch.__proto__ || Object.getPrototypeOf(JsonFetch)).call(this, url));
+	        var _this = _possibleConstructorReturn(this, (JsonFetch.__proto__ || Object.getPrototypeOf(JsonFetch)).call(this, url));
 
-	        _this2.headers = { 'Accept': 'application/json',
-	            'Content-Type': 'application/json' };
-	        return _this2;
+	        _this.headers = _extends({}, JSON_HEADERS);
+	        return _this;
 	    }
 
 	    _createClass(JsonFetch, [{
 	        key: 'setHeaders',
 	        value: function setHeaders(headers) {
-	            this.headers = _extends({}, this.headers, headers);
+	            var override = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+	            var keep = override ? {} : this.headers;
+	            this.headers = _extends({}, JSON_HEADERS, keep, headers);
 	            return this;
 	        }
 	    }, {

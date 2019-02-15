@@ -6,13 +6,15 @@ export class EasyFetch {
         this.options = {}
     }
 
-    setHeaders(headers) {
-        this.headers = headers
+    setHeaders(headers, override = true) {
+        const keep = override ? {} : this.headers
+        this.headers = {...keep, ...headers}
         return this
     }
 
-    setQueryParams(queryParams) {
-        this.queryParams = queryParams
+    setQueryParams(queryParams, override = true) {
+        const keep = override ? {} : this.queryParams
+        this.queryParams = {...keep, ...queryParams}
         return this
     }
 
@@ -27,7 +29,11 @@ export class EasyFetch {
     }
 
     _buildQueryParams() {
-        let q = Object.keys(this.queryParams).map((k) => [k, encodeURIComponent(this.queryParams[k])].join('=')).join('&')
+        let q = Object.entries(this.queryParams).map(([k, value]) => {
+            if (Array.isArray(value))
+                return value.map(v => [k, encodeURIComponent(v)].join('=')).join('&')
+            return [k, encodeURIComponent(value)].join('=')
+        }).join('&')
         if (this.url.indexOf("?") === -1 && q)
             q = `?${q}`
         return q
@@ -79,16 +85,18 @@ export function easyFetch(url) {
     return new EasyFetch(url)
 }
 
+const JSON_HEADERS = {'Accept': 'application/json',
+                      'Content-Type': 'application/json'}
 
 export class JsonFetch extends EasyFetch {
     constructor(url) {
         super(url)
-        this.headers = {'Accept': 'application/json',
-                        'Content-Type': 'application/json'}
+        this.headers = {...JSON_HEADERS}
     }
 
-    setHeaders(headers) {
-        this.headers = {...this.headers, ...headers}
+    setHeaders(headers, override = true) {
+        const keep = override ? {} : this.headers
+        this.headers = {...JSON_HEADERS, ...keep, ...headers}
         return this
     }
 
