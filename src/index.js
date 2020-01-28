@@ -76,8 +76,8 @@ export class EasyFetch {
         return this._fetch('PATCH', body)
     }
 
-    delete() {
-        return this._fetch('DELETE')
+    delete(body) {
+        return this._fetch('DELETE', body)
     }
 }
 
