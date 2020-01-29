@@ -71,7 +71,7 @@ It returns the promise returned by `fetch`.
 It returns the promise returned by `fetch`.
 *Calls `_fetch`.*
 
-### `delete()`
+### `delete(body)`
 It returns the promise returned by `fetch`.
 *Calls `_fetch`.*
 
