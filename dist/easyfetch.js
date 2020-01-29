@@ -177,8 +177,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }, {
 	        key: 'delete',
-	        value: function _delete() {
-	            return this._fetch('DELETE');
+	        value: function _delete(body) {
+	            return this._fetch('DELETE', body);
 	        }
 	    }]);
 
