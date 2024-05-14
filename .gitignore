@@ -37,3 +37,6 @@ es
 _book
 
 .DS_Store
+
+# IntelliJ IDEA
+.idea/

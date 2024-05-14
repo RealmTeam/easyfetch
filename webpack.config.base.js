@@ -1,20 +1,25 @@
-'use strict';
+const path = require('path');
 
 module.exports = {
+  entry: './src/index.js',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loaders: ['babel-loader'],
-        exclude: /node_modules/
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
       }
     ]
   },
   output: {
-    library: 'EasyFetch',
-    libraryTarget: 'umd'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'easyfetch.js',
+    library: 'easyfetch',
+    libraryTarget: 'umd',
   },
-  resolve: {
-    extensions: ['', '.js']
-  }
 };
